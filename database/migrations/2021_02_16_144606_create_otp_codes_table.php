@@ -14,7 +14,9 @@ class CreateOtpCodesTable extends Migration
     public function up()
     {
         Schema::create('otp_codes', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->uuid('otpcode_id')->primary();
+            $table->string('otp_code');
+            $table->dateTime('expired');
             $table->timestamps();
         });
     }
