@@ -11,6 +11,10 @@ class Otp_codes extends Model
 
     protected $primaryKey = 'otpcode_id';
 
+    public function user() {
+        return $this->hasOne('App\User');
+    }
+
     /**
      * The attributes that are mass assignable.
      *

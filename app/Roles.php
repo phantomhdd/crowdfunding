@@ -11,6 +11,10 @@ class Roles extends Model
 
     protected $primaryKey = 'role_id';
 
+    public function user() {
+        return $this->hasMany('App\User');
+    }
+
     /**
      * The attributes that are mass assignable.
      *

@@ -13,6 +13,14 @@ class User extends Authenticatable
 
     protected $primaryKey = 'user_id';
 
+    public function roles() {
+        return $this->belongsTo('App\Roles');
+    }
+
+    public function otp_code() {
+        return $this->belongsTo('App\Otp_codes');
+    }
+
     /**
      * The attributes that are mass assignable.
      *
