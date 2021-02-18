@@ -23,6 +23,6 @@ Route::middleware(['auth','verifyEmail'])->group(function () {
     Route::get('/route-1', 'TestController@route1');
 });
 
-Route::middleware(['auth','admin','verifyEmail'])->group(function () {
+Route::middleware(['auth','verifyEmail','admin'])->group(function () {
     Route::get('/route-2', 'TestController@route2');
 });

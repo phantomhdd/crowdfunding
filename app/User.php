@@ -42,7 +42,7 @@ class User extends Authenticatable
         parent::boot();
 
         static::creating(function ($model) {
-            $model->role_id = Roles::where('role','admin')->first()->role_id;
+            $model->role_id = Roles::where('role','user')->first()->role_id;
         });
     }
 
