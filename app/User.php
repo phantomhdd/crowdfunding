@@ -18,7 +18,32 @@ class User extends Authenticatable
     }
 
     public function otp_code() {
-        return $this->belongsTo('App\Otp_codes');
+        return $this->hasOne('App\Otp_codes');
+    }
+
+    /**
+     * function for check role Admin
+     *
+     * @return boolean
+     */
+    public function isAdmin() {
+        if ($this->role_id == Roles::where('role', 'admin')->first()->role_id) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * The "booting" function of model
+     *
+     * @return void
+     */
+    protected static function boot() {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->{$model->getForeignKey()} = Roles::where('role','admin')->first()->role_id;
+        });
     }
 
     /**

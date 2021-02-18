@@ -14,3 +14,15 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+Route::middleware(['auth','verifyEmail'])->group(function () {
+    Route::get('/route-1', 'TestController@route1');
+});
+
+Route::middleware(['auth','admin','verifyEmail'])->group(function () {
+    Route::get('/route-2', 'TestController@route2');
+});
