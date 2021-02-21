@@ -22,10 +22,10 @@ Route::namespace('Auth')->group(function(){
     Route::post('auth/verification','VerificationController');
     Route::post('auth/regenerate-otp','RegenerateOtpCodeController');
     Route::post('auth/update-password','UpdatePasswordController');
-    Route::post('auth/login','LoginController');
+    Route::post('auth/login','LoginController')->middleware('verifyEmail');
 });
 
-Route::namespace('Profile')->group(function(){
+Route::namespace('Profile')->middleware('auth')->group(function(){
     Route::get('profile/get-profile','GetProfileController');
     Route::post('profile/update-profile','UpdateProfileController');
 });

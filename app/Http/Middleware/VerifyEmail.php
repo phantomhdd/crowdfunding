@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\User;
 use Closure;
 
 class VerifyEmail
@@ -15,8 +16,10 @@ class VerifyEmail
      */
     public function handle($request, Closure $next)
     {
-        if($request->user()->email_verified_at == null){
-            abort(403, 'Your email is not verified.');
+        $user = User::where('email',request('email'))->first();
+        
+        if($user->email_verified_at == null){
+            return response(['message' => 'your email is not verified'], 403);
         }
         return $next($request);
     }
