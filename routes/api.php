@@ -20,4 +20,5 @@ use Illuminate\Http\Request;
 Route::namespace('Auth')->group(function(){
     Route::post('auth/register','RegisterController');
     Route::post('auth/verification','VerificationController');
+    Route::post('auth/regenerate-otp','RegenerateOtpCodeController');
 });
