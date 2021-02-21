@@ -21,4 +21,5 @@ Route::namespace('Auth')->group(function(){
     Route::post('auth/register','RegisterController');
     Route::post('auth/verification','VerificationController');
     Route::post('auth/regenerate-otp','RegenerateOtpCodeController');
+    Route::post('auth/update-password','UpdatePasswordController');
 });

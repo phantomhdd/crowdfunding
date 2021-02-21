@@ -36,11 +36,16 @@ class VerificationController extends Controller
             ]);
         }
 
-        User::where('user_id', $otp_code->user_id)->update(['email_verified_at' => $now]);
+        $user = User::where('user_id', $otp_code->user_id);
+        
+        $user->update([
+            'email_verified_at' => $now
+        ]);
 
         return response()->json([
             'response_code' => '00',
             'response_message' => 'berhasil diverifikasi',
+            'data' => ['user' => $user->first()],
         ]);
     }
 }
