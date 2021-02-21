@@ -27,7 +27,7 @@ class RegenerateOtpCodeController extends Controller
         return response()->json([
             'response_code' => '00',
             'response_message' => 'silakan cek email',
-            'data' => ['user' => $user],
+            'data' => compact('user'),
         ]);
     }
 }

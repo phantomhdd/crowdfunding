@@ -24,3 +24,7 @@ Route::namespace('Auth')->group(function(){
     Route::post('auth/update-password','UpdatePasswordController');
     Route::post('auth/login','LoginController');
 });
+
+Route::namespace('Profile')->group(function(){
+    Route::get('profile/get-profile','GetProfileController');
+});

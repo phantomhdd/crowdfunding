@@ -27,13 +27,11 @@ class RegisterController extends Controller
             'otp_code' => mt_rand(960000, 969999),
             'expired' => Carbon::now('Asia/Jakarta')->addMinutes(5),
         ]);
-
-        $response = [
+        
+        return response()->json([
             'response_code' => '00',
             'response_message' => 'silakan cek email',
-            'data' => ['user' => $user],
-        ];
-
-        return response($response);
+            'data' => compact('user'),
+        ]);
     }
 }
