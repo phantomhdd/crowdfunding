@@ -4,7 +4,7 @@ namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class VerificationRequest extends FormRequest
+class LoginRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,8 @@ class VerificationRequest extends FormRequest
     public function rules()
     {
         return [
-            'otp_code' => 'numeric|required|min:6',
+            'email' => 'email|required',
+            'password' => 'required|min:8',
         ];
     }
 }
