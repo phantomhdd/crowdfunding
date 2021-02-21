@@ -27,4 +27,5 @@ Route::namespace('Auth')->group(function(){
 
 Route::namespace('Profile')->group(function(){
     Route::get('profile/get-profile','GetProfileController');
+    Route::post('profile/update-profile','UpdateProfileController');
 });
