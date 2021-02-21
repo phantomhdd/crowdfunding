@@ -14,11 +14,11 @@ class User extends Authenticatable
     protected $primaryKey = 'user_id';
 
     public function roles() {
-        return $this->belongsTo('App\Roles');
+        return $this->belongsTo('App\Roles','role_id','role_id');
     }
 
     public function otp_code() {
-        return $this->hasOne('App\Otp_codes');
+        return $this->hasOne('App\Otp_codes','user_id','user_id');
     }
 
     /**
