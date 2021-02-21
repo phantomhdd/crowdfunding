@@ -20,7 +20,7 @@ class CreateOtpCodesTable extends Migration
             $table->dateTime('expired');
             $table->timestamps();
 
-            $table->foreign('user_id')->references('user_id')->on('users');
+            $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
         });
     }
 
