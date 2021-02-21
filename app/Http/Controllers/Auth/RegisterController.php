@@ -25,7 +25,7 @@ class RegisterController extends Controller
 
         $user->otp_code()->create([
             'otp_code' => mt_rand(960000, 969999),
-            'expired' => Carbon::now('Asia/Jakarta')->addMinutes(5)->toDateTimeString(),
+            'expired' => Carbon::now('Asia/Jakarta')->addMinutes(5),
         ]);
 
         $response = [
