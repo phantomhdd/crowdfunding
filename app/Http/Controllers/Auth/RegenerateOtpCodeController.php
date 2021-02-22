@@ -20,10 +20,7 @@ class RegenerateOtpCodeController extends Controller
     {
         $user = User::where('email', request('email'))->first();
 
-        $user->otp_code()->update([
-            'otp_code' => mt_rand(960000, 969999),
-            'expired' => Carbon::now('Asia/Jakarta')->addMinutes(5),
-        ]);
+        $user->generate_otp_code();
 
         event(new UserRegisteredEvent($user));
 

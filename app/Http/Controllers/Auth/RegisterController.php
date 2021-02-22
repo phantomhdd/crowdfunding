@@ -18,16 +18,7 @@ class RegisterController extends Controller
      */
     public function __invoke(RegisterRequest $request)
     {
-        $user = User::create([
-            'name' => request('name'),
-            'email' => request('email'),
-            'password' => bcrypt('12345678')
-        ]);
-
-        $user->otp_code()->create([
-            'otp_code' => mt_rand(960000, 969999),
-            'expired' => Carbon::now('Asia/Jakarta')->addMinutes(5),
-        ]);
+        $user = User::create($request->all());
 
         event(new UserRegisteredEvent($user));
         

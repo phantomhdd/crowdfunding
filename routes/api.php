@@ -17,15 +17,15 @@ use Illuminate\Http\Request;
 //     return $request->user();
 // });
 
-Route::namespace('Auth')->group(function(){
-    Route::post('auth/register','RegisterController');
-    Route::post('auth/verification','VerificationController');
-    Route::post('auth/regenerate-otp','RegenerateOtpCodeController');
-    Route::post('auth/update-password','UpdatePasswordController');
-    Route::post('auth/login','LoginController')->middleware('verifyEmail');
+Route::prefix('auth')->namespace('Auth')->group(function(){
+    Route::post('register','RegisterController');
+    Route::post('verification','VerificationController');
+    Route::post('regenerate-otp','RegenerateOtpCodeController');
+    Route::post('update-password','UpdatePasswordController');
+    Route::post('login','LoginController')->middleware('verifyEmail');
 });
 
-Route::namespace('Profile')->middleware('auth')->group(function(){
-    Route::get('profile/get-profile','GetProfileController');
-    Route::post('profile/update-profile','UpdateProfileController');
+Route::prefix('profile')->namespace('Profile')->middleware('auth')->group(function(){
+    Route::get('get-profile','GetProfileController');
+    Route::post('update-profile','UpdateProfileController');
 });
