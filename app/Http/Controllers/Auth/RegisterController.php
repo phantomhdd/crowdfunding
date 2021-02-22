@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Events\UserRegisteredEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\User;
@@ -27,6 +28,8 @@ class RegisterController extends Controller
             'otp_code' => mt_rand(960000, 969999),
             'expired' => Carbon::now('Asia/Jakarta')->addMinutes(5),
         ]);
+
+        event(new UserRegisteredEvent($user));
         
         return response()->json([
             'response_code' => '00',
