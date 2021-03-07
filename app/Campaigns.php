@@ -10,4 +10,13 @@ class Campaigns extends Model
     use Uuid;
 
     protected $guarded = [];
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'title', 'description', 'image',
+    ];
 }
