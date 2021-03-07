@@ -1,18 +1,31 @@
 <template>
-    <div class="wrapper">
-        <h2>SANBERCODE</h2>
-        <router-link to="/">Home</router-link>
-        <router-link to="/donations">Donations</router-link>
-        <router-link to="/blogs">Blog</router-link>
-        <div class="content-wrapper">
-            <router-view></router-view>
-        </div>
-    </div>
+    <v-app>
+        <v-navigation-drawer app>
+            Sidebar
+        </v-navigation-drawer>
+
+        <v-app-bar app>
+            Header
+        </v-app-bar>
+
+        <!-- Sizes your content based upon application components -->
+        <v-main>
+            <!-- Provides the application the proper gutter -->
+            <v-container fluid>
+                <!-- If using vue-router -->
+                <router-view></router-view>
+            </v-container>
+        </v-main>
+
+        <v-footer app>
+            @Footer
+        </v-footer>
+    </v-app>
 </template>
 <script>
-    export default {
-        created() {
-            console.log('Component mounted.')
-        }
+export default {
+    created() {
+        console.log("Component mounted.");
     }
+};
 </script>
