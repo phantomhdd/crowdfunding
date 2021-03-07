@@ -28,12 +28,19 @@ class UpdateProfileController extends Controller
 
         $user = User::where('user_id', $request->user()->user_id);
         
-        $user->update([
-            'name' => request('name'),
-            'photo' => $path.$fileName,
-        ]);
-
-        $photo->move($path,$fileName);
+        try {
+            $user->update([
+                'name' => request('name'),
+                'photo' => $path.$fileName,
+            ]);
+    
+            $photo->move($path,$fileName);
+        } catch (\Exception $e) {
+            return response()->json([
+                'response_code' => '01',
+                'response_message' => 'profil gagal diupdate',
+            ]);
+        }
 
         return response()->json([
             'response_code' => '00',

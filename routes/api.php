@@ -29,3 +29,11 @@ Route::prefix('profile')->namespace('Profile')->middleware('auth')->group(functi
     Route::get('get-profile','GetProfileController');
     Route::post('update-profile','UpdateProfileController');
 });
+
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'campaign',
+], function(){
+    Route::get('random/{count}','CampaignController@random');
+    Route::post('store','CampaignController@store');
+});

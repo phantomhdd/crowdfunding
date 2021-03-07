@@ -1,7 +1,7 @@
 <template>
     <v-app>
         <!-- Sidebar -->
-        <v-navigation-drawer app v-model="drawer">
+        <v-navigation-drawer app v-model="drawer" color="teal darken-2" dark>
             <v-list>
                 <v-list-item v-if="!guest">
                     <v-list-item-avatar>
@@ -38,7 +38,7 @@
 
             <template v-slot:append v-if="!guest">
                 <div class="pa-2">
-                    <v-btn block color="red" dark>
+                    <v-btn block dark>
                         <v-icon left>mdi-lock</v-icon>
                         Logout
                     </v-btn>
@@ -47,7 +47,7 @@
         </v-navigation-drawer>
 
         <!-- Header -->
-        <v-app-bar app>
+        <v-app-bar app color="teal" dark>
             <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
             <v-toolbar-title>Crowdfunding</v-toolbar-title>
