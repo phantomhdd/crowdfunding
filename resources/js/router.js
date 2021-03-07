@@ -19,8 +19,13 @@ const router = new Router({
         },
         {
             path: '/blogs',
-            name: 'blog',
+            name: 'blogs',
             component: () => import(/* webpackChunkName: "Categories" */ './views/Blogs.vue')
+        },
+        {
+            path: '/campaigns',
+            name: 'campaigns',
+            component: () => import(/* webpackChunkName: "Categories" */ './views/Campaigns.vue')
         },
         {
             path: '*',

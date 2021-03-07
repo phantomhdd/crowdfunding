@@ -98925,9 +98925,15 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
     }
   }, {
     path: '/blogs',
-    name: 'blog',
+    name: 'blogs',
     component: function component() {
       return __webpack_require__.e(/*! import() | Categories */ "Categories").then(__webpack_require__.bind(null, /*! ./views/Blogs.vue */ "./resources/js/views/Blogs.vue"));
+    }
+  }, {
+    path: '/campaigns',
+    name: 'campaigns',
+    component: function component() {
+      return __webpack_require__.e(/*! import() | Categories */ "Categories").then(__webpack_require__.bind(null, /*! ./views/Campaigns.vue */ "./resources/js/views/Campaigns.vue"));
     }
   }, {
     path: '*',

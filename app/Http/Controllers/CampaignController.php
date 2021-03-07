@@ -69,4 +69,16 @@ class CampaignController extends Controller
         ], 200);
 
     }
+
+    public function index(){
+        $campaigns = Campaigns::paginate(6);
+
+        $data['campaigns'] = $campaigns;
+
+        return response()->json([
+            'response_code' => '00',
+            'response_message' => 'data campaigns berhasil ditampilkan',
+            'data' => $data,
+        ], 200);
+    }
 }
