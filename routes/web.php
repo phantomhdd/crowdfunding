@@ -11,18 +11,20 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::view('/{any?}', 'App')->where('any', '.*');
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::middleware(['auth','verifyEmail'])->group(function () {
+Route::middleware(['auth', 'verifyEmail'])->group(function () {
     Route::get('/route-1', 'TestController@route1');
 });
 
-Route::middleware(['auth','verifyEmail','admin'])->group(function () {
+Route::middleware(['auth', 'verifyEmail', 'admin'])->group(function () {
     Route::get('/route-2', 'TestController@route2');
 });
