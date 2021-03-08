@@ -56,10 +56,10 @@
             <v-spacer></v-spacer>
 
             <v-btn icon>
-                <v-badge color="orange" overlap>
-                    <template v-slot:badge>
+                <v-badge color="orange" overlap :content="transaction" :value="transaction">
+                    <!-- <template v-slot:badge>
                         <span>{{ $store.state.count }}</span>
-                    </template>
+                    </template> -->
                     <v-icon>mdi-cash-multiple</v-icon>
                 </v-badge>
             </v-btn>
@@ -76,10 +76,10 @@
             <v-spacer></v-spacer>
 
             <v-btn icon>
-                <v-badge color="orange" overlap>
-                    <template v-slot:badge>
+                <v-badge color="orange" overlap :content="transaction" :value="transaction">
+                    <!-- <template v-slot:badge>
                         <span>{{ $store.state.count }}</span>
-                    </template>
+                    </template> -->
                     <v-icon>mdi-cash-multiple</v-icon>
                 </v-badge>
             </v-btn>
@@ -107,6 +107,8 @@
     </v-app>
 </template>
 <script>
+    import { mapGetters } from 'vuex'
+
     export default {
         name: 'App',
         data: () => ({
@@ -120,7 +122,13 @@
         computed: {
             isHome() {
                 return (this.$route.path === '/' || this.$route.path === '/home')
-            }
+            },
+            ...mapGetters({
+                'transaction' : 'transaction'
+            }),
+            // transaction () {
+            //     return this.$store.getters.transaction
+            // }
         }
     };
 </script>

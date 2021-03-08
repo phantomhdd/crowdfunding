@@ -23,9 +23,9 @@ class CampaignsSeeder extends Seeder
         for ($i = 0; $i < 23; $i++){
             $id = $faker->uuid;
 
-            $required = $faker->randomNumber(4).'000';
+            $required = $faker->mt_rand(0000, 9999).'000';
             do {
-                $collected = $faker->randomNumber(4).'000';
+                $collected = $faker->mt_rand(0000, 9999).'000';
             } while ($collected > $required);
             
             $campaigns = Campaigns::create([

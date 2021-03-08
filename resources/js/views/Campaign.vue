@@ -42,6 +42,8 @@
 </template>
 
 <script>
+    import { mapMutations } from 'vuex'
+
     export default {
         data: () => ({
             campaign: {},
@@ -63,9 +65,12 @@
                         console.log(responses)
                     })
             },
-            donate() {
-                this.$store.commit('increment')
-            }
+            ...mapMutations({
+                'donate' : 'increment'
+            })
+            // donate() {
+            //     this.$store.commit('increment')
+            // }
         }
     }
 </script>

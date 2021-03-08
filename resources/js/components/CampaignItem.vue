@@ -6,14 +6,15 @@
             </v-img>
 
             <v-card-actions>
-                <v-progress-linear v-model="progress" :color="color" rounded></v-progress-linear>
+                <v-progress-linear v-model="progress" height="13" :color="color" rounded>
+                    <span class="text-light text-caption">{{ progress }}%</span>
+                </v-progress-linear>
             </v-card-actions>
 
             <v-card-actions>
                 <v-icon>mdi-cash</v-icon>
                 <span>{{ $n(campaign.required, 'currency', 'ja-JP') }}</span>
                 <v-spacer></v-spacer>
-                <span>{{ progress }}%</span>
             </v-card-actions>
         </v-card>
     </div>
