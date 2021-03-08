@@ -64,7 +64,7 @@
                     })
             },
             donate() {
-                alert('donate')
+                this.$store.commit('increment')
             }
         }
     }

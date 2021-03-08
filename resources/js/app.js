@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import Vuex from 'vuex'
 import router from './router.js'
 import App from './App.vue'
 import vuetify from './plugins/vuetify.js'
@@ -7,8 +8,20 @@ import VueI18n from 'vue-i18n'
 import '@mdi/font/css/materialdesignicons.css'
 import Icon from 'vuetify/lib'
 
+Vue.use(Vuex)
 Vue.use(VueI18n)
 Vue.use(Icon)
+
+const store = new Vuex.Store({
+    state: {
+        count: 0
+    },
+    mutations: {
+        increment (state) {
+            state.count++
+        }
+    }
+})
 
 export default new Icon({
   icons: {
@@ -39,6 +52,7 @@ const i18n = new VueI18n({
 
 const app = new Vue({
     el: '#app',
+    store,
     router,
     vuetify,
     i18n,
