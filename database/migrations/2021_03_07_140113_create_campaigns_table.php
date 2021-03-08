@@ -18,6 +18,9 @@ class CreateCampaignsTable extends Migration
             $table->string('title');
             $table->text('description');
             $table->string('image')->nullable();
+            $table->string('address')->nullable();
+            $table->integer('required')->nullable();
+            $table->integer('collected')->nullable();
             $table->timestamps();
         });
     }

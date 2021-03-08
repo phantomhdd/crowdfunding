@@ -22,11 +22,20 @@ class CampaignsSeeder extends Seeder
 
         for ($i = 0; $i < 23; $i++){
             $id = $faker->uuid;
+
+            $required = $faker->randomNumber(4).'000';
+            do {
+                $collected = $faker->randomNumber(4).'000';
+            } while ($collected > $required);
+            
             $campaigns = Campaigns::create([
                 'id' => $id,
                 'title' => $faker->name . 'の助け',
-                'description' => $faker->paragraph(),
-                'image' => 'images/campaign/'.$given[array_rand($given)],
+                'description' => $faker->paragraph(11),
+                'image' => '/images/campaign/'.$given[array_rand($given)],
+                'address' => $faker->streetAddress,
+                'required' => $required,
+                'collected' => $collected,
             ]);
         }
     }
