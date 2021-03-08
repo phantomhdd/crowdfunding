@@ -8,11 +8,12 @@
             <v-layout wrap>
                 <v-layout wrap>
                     <v-flex v-for="(campaign) in campaigns" :key="`campaign-`+campaign.id" xs6>
-                        <v-card class="mx-auto" max-width="344" :to="'/campaign/'+campaign.id">
+                        <!-- <v-card class="mx-auto" max-width="344" :to="'/campaign/'+campaign.id">
                             <v-img :aspect-ratio="16/9" :src="campaign.image" class="white--text">
                                 <v-card-title class="fill-height align-end" v-text="campaign.title"></v-card-title>
                             </v-img>
-                        </v-card>
+                        </v-card> -->
+                        <campaign-item :campaign="campaign"></campaign-item>
                     </v-flex>
                 </v-layout>
             </v-layout>
@@ -30,6 +31,9 @@
             page: 0,
             lengthPage: 0,
         }),
+        components: {
+            CampaignItem: () => import('../components/CampaignItem.vue')
+        },
         created() {
             this.go()
         },

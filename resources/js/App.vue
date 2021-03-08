@@ -64,7 +64,7 @@
                 </v-badge>
             </v-btn>
 
-            <v-text-field slot="extension" hide-details append-icon="mdi-microphone" flat label="Search" prepend-inner-icon="mdi-magnify" solo-inverted></v-text-field>
+            <v-text-field class="mb-5" slot="extension" hide-details append-icon="mdi-microphone" flat label="Search" prepend-inner-icon="mdi-magnify" solo-inverted></v-text-field>
         </v-app-bar>
 
         <v-app-bar app color="teal" dark v-else>
