@@ -1,6 +1,6 @@
 <template>
     <div>
-        <!-- Template Categories -->
+        <!-- Template Campaigns -->
         <v-container class="ma-0 pa-0" grid-list-sm>
             
             <div class="text-right">
@@ -32,7 +32,7 @@
             </div>
 
             <v-layout wrap>
-                <v-carousel hide-delimiters height="250px">
+                <v-carousel hide-delimiters height="200px" class="mx-auto my-1">
                     <v-carousel-item v-for="(blog,i) in blogs" :key="`blog-`+blog.id">
                         <v-img :src="blog.image" class="fill-height" gradient="to top right, rgba(100,115,201,.33), rgba(25,32,72,.7)">
                             <v-container fill-height fluid pa-0 ma-0>

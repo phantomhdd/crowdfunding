@@ -13,7 +13,7 @@
 
             <v-card-actions>
                 <v-icon>mdi-cash</v-icon>
-                <span>{{ $n(campaign.required, 'currency', 'ja-JP') }}</span>
+                <span class="orange--text">{{ $n(campaign.required, 'currency', 'ja-JP') }}</span>
                 <v-spacer></v-spacer>
             </v-card-actions>
         </v-card>

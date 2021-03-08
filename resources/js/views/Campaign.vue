@@ -34,7 +34,7 @@
             </v-card-text>
             <v-card-actions>
                 <v-btn block dark color="light-green darken-4" @click="donate" :disabled="campaign.collected >= campaign.required">
-                    <v-icon>mdi-money</v-icon> DONATE
+                    <v-icon>mdi-hand-heart</v-icon> DONATE
                 </v-btn>
             </v-card-actions>
         </v-card>
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-    import { mapMutations } from 'vuex'
+    import { mapActions, mapMutations } from 'vuex'
 
     export default {
         data: () => ({
@@ -65,12 +65,23 @@
                         console.log(responses)
                     })
             },
-            ...mapMutations({
-                donate : 'transaction/increment'
-            })
             // donate() {
             //     this.$store.commit('increment')
-            // }
+            // },
+            ...mapMutations({
+                addTransaction: 'transaction/increment'
+            }),
+            ...mapActions({
+                setAlert: 'alert/set'
+            }),
+            donate(){
+                this.addTransaction()
+                this.setAlert({
+                    status: true,
+                    color: 'green darken-2',
+                    text: 'Thanks, Donate Success!'
+                })
+            }
         }
     }
 </script>

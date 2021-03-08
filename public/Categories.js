@@ -102,7 +102,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   created: function created() {
     this.go();
   },
-  methods: _objectSpread({
+  methods: _objectSpread(_objectSpread(_objectSpread({
     go: function go() {
       var _this = this;
 
@@ -117,8 +117,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     }
   }, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapMutations"])({
-    donate: 'transaction/increment'
-  }))
+    addTransaction: 'transaction/increment'
+  })), Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])({
+    setAlert: 'alert/set'
+  })), {}, {
+    donate: function donate() {
+      this.addTransaction();
+      this.setAlert({
+        status: true,
+        color: 'green darken-2',
+        text: 'Thanks, Donate Success!'
+      });
+    }
+  })
 });
 
 /***/ }),
@@ -515,7 +526,7 @@ var render = function() {
                       on: { click: _vm.donate }
                     },
                     [
-                      _c("v-icon", [_vm._v("mdi-money")]),
+                      _c("v-icon", [_vm._v("mdi-hand-heart")]),
                       _vm._v(" DONATE\n            ")
                     ],
                     1
@@ -742,7 +753,10 @@ var render = function() {
             [
               _c(
                 "v-carousel",
-                { attrs: { "hide-delimiters": "", height: "250px" } },
+                {
+                  staticClass: "mx-auto my-1",
+                  attrs: { "hide-delimiters": "", height: "200px" }
+                },
                 _vm._l(_vm.blogs, function(blog, i) {
                   return _c(
                     "v-carousel-item",

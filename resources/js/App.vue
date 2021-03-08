@@ -1,5 +1,8 @@
 <template>
     <v-app>
+        <!-- Alert -->
+        <Alert></Alert>
+
         <!-- Sidebar -->
         <v-navigation-drawer app v-model="drawer" color="teal darken-2" dark>
             <v-list>
@@ -38,7 +41,7 @@
 
             <template v-slot:append v-if="!guest">
                 <div class="pa-2">
-                    <v-btn block dark>
+                    <v-btn block dark color="red darken-2">
                         <v-icon left>mdi-lock</v-icon>
                         Logout
                     </v-btn>
@@ -46,7 +49,7 @@
             </template>
         </v-navigation-drawer>
 
-        <!-- Header -->
+        <!-- Header Home -->
         <v-app-bar app color="teal" dark v-if="isHome">
             <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
@@ -67,6 +70,7 @@
             <v-text-field class="mb-5" slot="extension" hide-details append-icon="mdi-microphone" flat label="Search" prepend-inner-icon="mdi-magnify" solo-inverted></v-text-field>
         </v-app-bar>
 
+        <!-- Header Others-->
         <v-app-bar app color="teal" dark v-else>
             <v-btn icon @click.stop="$router.go(-1)">
                 <v-icon>mdi-arrow-left-circle</v-icon>
@@ -99,8 +103,8 @@
         <!-- Footer -->
         <v-card>
             <v-footer absolute app>
-                <v-card-text class="text-center">
-                    &copy; {{ new Date().getFullYear() }} - <strong>Crowdfunding</strong>
+                <v-card-text class="text-center text-caption">
+                    &copy;{{ new Date().getFullYear() }} - Crowdfunding <v-icon color="red lighten-1">mdi-heart</v-icon>
                 </v-card-text>
             </v-footer>
         </v-card>
@@ -129,6 +133,9 @@
             // transaction () {
             //     return this.$store.getters.transaction
             // }
+        },
+        components: {
+            Alert: () => import('./components/Alert.vue')
         }
     };
 </script>

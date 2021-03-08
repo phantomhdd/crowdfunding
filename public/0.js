@@ -124,7 +124,7 @@ var render = function() {
             [
               _c("v-icon", [_vm._v("mdi-cash")]),
               _vm._v(" "),
-              _c("span", [
+              _c("span", { staticClass: "orange--text" }, [
                 _vm._v(
                   _vm._s(_vm.$n(_vm.campaign.required, "currency", "ja-JP"))
                 )
