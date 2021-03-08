@@ -66,7 +66,7 @@
                     })
             },
             ...mapMutations({
-                'donate' : 'increment'
+                donate : 'transaction/increment'
             })
             // donate() {
             //     this.$store.commit('increment')

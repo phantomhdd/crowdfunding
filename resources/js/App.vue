@@ -56,7 +56,7 @@
             <v-spacer></v-spacer>
 
             <v-btn icon>
-                <v-badge color="orange" overlap :content="transaction" :value="transaction">
+                <v-badge color="orange" overlap :content="transactions" :value="transactions">
                     <!-- <template v-slot:badge>
                         <span>{{ $store.state.count }}</span>
                     </template> -->
@@ -76,7 +76,7 @@
             <v-spacer></v-spacer>
 
             <v-btn icon>
-                <v-badge color="orange" overlap :content="transaction" :value="transaction">
+                <v-badge color="orange" overlap :content="transactions" :value="transactions">
                     <!-- <template v-slot:badge>
                         <span>{{ $store.state.count }}</span>
                     </template> -->
@@ -124,7 +124,7 @@
                 return (this.$route.path === '/' || this.$route.path === '/home')
             },
             ...mapGetters({
-                'transaction' : 'transaction'
+                transactions : 'transaction/transactions'
             }),
             // transaction () {
             //     return this.$store.getters.transaction
