@@ -113,7 +113,7 @@ var render = function() {
           _c("v-text-field", {
             attrs: {
               "hide-details": "",
-              "prepend-icon": "mdi-magnify",
+              "prepend-inner-icon": "mdi-magnify",
               flat: "",
               autofocus: "",
               label: "Search Campaign"

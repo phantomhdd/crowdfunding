@@ -24,7 +24,7 @@ class UpdateProfileController extends Controller
 
         $photo = $request->file('photo');
         $fileName = $request->user()->user_id.'.'.$photo->getClientOriginalExtension();
-        $path = 'images/photo-profiles/';
+        $path = '/images/photo-profiles/';
 
         $user = User::where('user_id', $request->user()->user_id);
         

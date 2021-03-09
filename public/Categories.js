@@ -131,7 +131,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.setAlert({
         status: true,
         color: 'green darken-2',
-        text: 'Thanks, Donate Success!'
+        text: 'Thanks, Donate Success!',
+        icon: 'mdi-check-circle',
+        locAlert: true
       });
     }
   })

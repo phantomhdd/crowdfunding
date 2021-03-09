@@ -4,24 +4,30 @@
         <Alert></Alert>
 
         <!-- Dialog -->
-        <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-top-transition">
+        <!-- <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-top-transition">
             <search @closed="closeDialog"></search>
-        </v-dialog>
+        </v-dialog> -->
+
+        <keep-alive>
+            <v-dialog v-model="dialog" fullscreen hide-overlay persistent transition="expand-transition">
+                <component :is="currentComponent" @closed="setDialogStatus"></component>
+            </v-dialog>
+        </keep-alive>
 
         <!-- Sidebar -->
         <v-navigation-drawer app v-model="drawer" color="teal darken-2" dark>
             <v-list>
                 <v-list-item v-if="!guest">
                     <v-list-item-avatar>
-                        <v-img src="./images/photo-profiles/0cd9ccda-683b-49f7-acff-8b88e4c1e6e2.jpg"></v-img>
+                        <v-img :src="user.user.photo"></v-img>
                     </v-list-item-avatar>
                     <v-list-item-content>
-                        <v-list-item-title>遠藤さくら</v-list-item-title>
+                        <v-list-item-title>{{ user.user.name }}</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
 
                 <div class="pa-2" v-if="guest">
-                    <v-btn block color="primary" class="mb-1">
+                    <v-btn block color="primary" class="mb-1" @click="setDialogComponent('login')">
                         <v-icon left>mdi-lock</v-icon>
                         Login
                     </v-btn>
@@ -46,7 +52,7 @@
 
             <template v-slot:append v-if="!guest">
                 <div class="pa-2">
-                    <v-btn block dark color="red darken-2">
+                    <v-btn block dark color="red darken-2" @click="logout">
                         <v-icon left>mdi-lock</v-icon>
                         Logout
                     </v-btn>
@@ -75,7 +81,7 @@
                     <v-icon>mdi-cash-multiple</v-icon>
                 </v-badge>
             </v-btn>
-            <v-btn icon v-if="!isCampaign" @click="closeDialog">
+            <v-btn icon v-if="!isCampaign" @click="setDialogComponent('search')">
                 <v-icon>mdi-magnify</v-icon>
             </v-btn>
             <!-- <v-text-field class="mb-5" slot="extension" hide-details append-icon="mdi-microphone" flat label="Search Campaign" prepend-inner-icon="mdi-magnify" solo-inverted></v-text-field> -->
@@ -103,7 +109,7 @@
     </v-app>
 </template>
 <script>
-    import { mapGetters } from 'vuex'
+    import { mapActions, mapGetters } from 'vuex'
 
     export default {
         name: 'App',
@@ -113,8 +119,8 @@
                 {title: 'Home', icon: 'mdi-home', route: '/'},
                 {title: 'Campaigns', icon: 'mdi-hand-heart', route: '/campaigns'},
             ],
-            guest: false,
-            dialog: false,
+            // guest: false,
+            // dialog: false,
         }),
         computed: {
             isHome() {
@@ -128,19 +134,66 @@
             },
             ...mapGetters({
                 transactions : 'transaction/transactions',
-                titlePage: 'page/titlePage'
+                titlePage: 'page/titlePage',
+                user: 'auth/user',
+                guest: 'auth/guest',
+                dialogStatus: 'dialog/status',
+                currentComponent: 'dialog/component',
             }),
+            dialog:{
+                set(value) {
+                    this.setDialogStatus(value)
+                },
+                get() {
+                    return this.dialogStatus
+                }
+            },
             // transaction () {
             //     return this.$store.getters.transaction
             // }
         },
         components: {
             Alert: () => import('./components/Alert.vue'),
-            Search: () => import('./components/Search.vue')
+            Search: () => import('./components/Search.vue'),
+            Login: () => import('./components/Login.vue'),
         },
         methods: {
-            closeDialog(value) {
-                this.dialog = value
+            // closeDialog(value) {
+            //     this.dialog = value
+            // },
+            ...mapActions({
+                setDialogStatus: 'dialog/setStatus',
+                setDialogComponent: 'dialog/setComponent',
+                setAuth: 'auth/set',
+                setAlert: 'alert/set',
+            }),
+            logout() {
+                let config = {
+                    headers: {
+                        'Authorization': 'Bearer ' + this.user.token,
+                    }
+                }
+                axios.post('/api/auth/logout', {}, config)
+                    .then((response) => {
+                        this.setAuth({})
+                        this.setAlert({
+                            status: true,
+                            color: 'success',
+                            text: 'Logout Success!',
+                            icon: 'mdi-check-circle',
+                            locAlert: false,
+                        })
+                    })
+                    .catch((error) => {
+                        let resp_error = error.response
+                        this.setAlert({
+                            status: true,
+                            color: 'error',
+                            text: resp_error.message,
+                            icon: 'mdi-close-octagon',
+                            locAlert: false,
+                        })
+                    })
             }
         }
     };

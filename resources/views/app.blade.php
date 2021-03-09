@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Crowdfunding</title>
     <link rel="stylesheet" href="{{ url('./css/app.css') }}">
+    <link rel="shortcut icon" href="{{ url('./images/hand-love.ico') }}" type="image/x-icon">
 </head>
 <body>
     

@@ -39,13 +39,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'alert',
   computed: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])({
     status: 'alert/status',
     color: 'alert/color',
-    text: 'alert/text'
+    text: 'alert/text',
+    icon: 'alert/icon',
+    locAlert: 'alert/locAlert'
   })), {}, {
     alert: {
       set: function set(value) {
@@ -89,7 +92,12 @@ var render = function() {
   return _c(
     "v-snackbar",
     {
-      attrs: { top: "", timeout: "2751", color: _vm.color },
+      attrs: {
+        top: _vm.locAlert,
+        bottom: !_vm.locAlert,
+        timeout: "3751",
+        color: _vm.color
+      },
       model: {
         value: _vm.alert,
         callback: function($$v) {
@@ -99,7 +107,7 @@ var render = function() {
       }
     },
     [
-      _c("v-icon", [_vm._v("mdi-check-circle")]),
+      _c("v-icon", [_vm._v(_vm._s(_vm.icon))]),
       _vm._v(" "),
       _c("span", { domProps: { innerHTML: _vm._s(_vm.text) } })
     ],

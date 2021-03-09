@@ -20,12 +20,18 @@ class LoginController extends Controller
         $credentials = $request->only('email','password');
         
         if(!$token = auth()->attempt($credentials)) {
-            return response(null, 401);
+            return response()->json([
+                'error' => 'E-mail atau Password salah!'
+            ], 401);
         }
         
         $user = User::where('email',request('email'))
                     ->first();
 
-        return response()->json(compact('token','user'));
+        return response()->json([
+            'response_code' => '00',
+            'response_message' => 'user berhasil login',
+            'data' => compact('token','user'),
+        ]);
     }
 }

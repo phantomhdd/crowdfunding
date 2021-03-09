@@ -2,11 +2,12 @@
     <!-- snackbar -->
     <v-snackbar
         v-model="alert"
-        top
-        timeout="2751"
+        :top="locAlert"
+        :bottom="!locAlert"
+        timeout="3751"
         :color="color"
     >
-    <v-icon>mdi-check-circle</v-icon>
+    <v-icon>{{ icon }}</v-icon>
         <span v-html="text"></span>
         <!-- <template v-slot:action="{ attrs }">
             <v-btn
@@ -30,7 +31,9 @@
             ...mapGetters({
                 status: 'alert/status',
                 color: 'alert/color',
-                text: 'alert/text'
+                text: 'alert/text',
+                icon: 'alert/icon',
+                locAlert: 'alert/locAlert',
             }),
             alert: {
                 set(value) {
