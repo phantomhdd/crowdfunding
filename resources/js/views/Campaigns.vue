@@ -1,10 +1,6 @@
 <template>
     <div>
         <v-container class="ma-0 pa-0" grid-list-sm>
-            <v-subheader>
-                All Campaigns
-            </v-subheader>
-
             <v-layout wrap>
                 <v-layout wrap>
                     <v-flex v-for="(campaign) in campaigns" :key="`campaign-`+campaign.id" xs6>
@@ -25,19 +21,28 @@
 </template>
 
 <script>
+    import { mapActions } from 'vuex'
+
     export default {
         data: () => ({
             campaigns: [],
             page: 0,
             lengthPage: 0,
+            titlePage: 'All Campaigns'
         }),
         components: {
             CampaignItem: () => import('../components/CampaignItem.vue')
         },
         created() {
             this.go()
+            this.setTitle({
+                titlePage : this.titlePage
+            })
         },
         methods: {
+            ...mapActions({
+                setTitle: 'page/set'
+            }),
             go(){
                 let url = '/api/campaign?page=' + this.page
                 axios.get(url)

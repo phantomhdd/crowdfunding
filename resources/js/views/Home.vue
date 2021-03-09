@@ -51,13 +51,21 @@
 </template>
 
 <script>
+    import { mapActions } from 'vuex'
+    
     export default {
         data: () => ({
             campaigns: [],
             blogs: [],
+            titlePage: 'Crowfunding'
         }),
         components : {
             CampaignItem: () => import('../components/CampaignItem.vue')
+        },
+        methods: {
+            ...mapActions({
+                setTitle: 'page/set'
+            }),
         },
         created() {
             axios.get('api/campaign/random/2')
@@ -79,6 +87,9 @@
                     let { responses } = error
                     console.log(responses)
                 })
+            this.setTitle({
+                titlePage : this.titlePage
+            })
         }
     }
 </script>

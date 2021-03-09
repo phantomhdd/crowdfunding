@@ -34,7 +34,7 @@
             </v-card-text>
             <v-card-actions>
                 <v-btn block dark color="light-green darken-4" @click="donate" :disabled="campaign.collected >= campaign.required">
-                    <v-icon>mdi-hand-heart</v-icon> DONATE
+                    <v-icon>mdi-hand-heart</v-icon>&nbsp; DONATE
                 </v-btn>
             </v-card-actions>
         </v-card>
@@ -47,9 +47,13 @@
     export default {
         data: () => ({
             campaign: {},
+            titlePage: 'Campaign'
         }),
         created() {
             this.go()
+            this.setTitle({
+                titlePage : this.titlePage
+            })
         },
         methods: {
             go() {
@@ -72,7 +76,8 @@
                 addTransaction: 'transaction/increment'
             }),
             ...mapActions({
-                setAlert: 'alert/set'
+                setAlert: 'alert/set',
+                setTitle: 'page/set'
             }),
             donate(){
                 this.addTransaction()

@@ -3,15 +3,20 @@
         <!-- Alert -->
         <Alert></Alert>
 
+        <!-- Dialog -->
+        <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-top-transition">
+            <search @closed="closeDialog"></search>
+        </v-dialog>
+
         <!-- Sidebar -->
         <v-navigation-drawer app v-model="drawer" color="teal darken-2" dark>
             <v-list>
                 <v-list-item v-if="!guest">
                     <v-list-item-avatar>
-                        <v-img src="https://randomuser.me/api/portraits/women/18.jpg"></v-img>
+                        <v-img src="./images/photo-profiles/0cd9ccda-683b-49f7-acff-8b88e4c1e6e2.jpg"></v-img>
                     </v-list-item-avatar>
                     <v-list-item-content>
-                        <v-list-item-title>猿渡さくら</v-list-item-title>
+                        <v-list-item-title>遠藤さくら</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
 
@@ -50,31 +55,14 @@
         </v-navigation-drawer>
 
         <!-- Header Home -->
-        <v-app-bar app color="teal" dark v-if="isHome">
-            <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-
-            <v-toolbar-title>Crowdfunding</v-toolbar-title>
-
-            <!-- Spacing -->
-            <v-spacer></v-spacer>
-
-            <v-btn icon>
-                <v-badge color="orange" overlap :content="transactions" :value="transactions">
-                    <!-- <template v-slot:badge>
-                        <span>{{ $store.state.count }}</span>
-                    </template> -->
-                    <v-icon>mdi-cash-multiple</v-icon>
-                </v-badge>
-            </v-btn>
-
-            <v-text-field class="mb-5" slot="extension" hide-details append-icon="mdi-microphone" flat label="Search" prepend-inner-icon="mdi-magnify" solo-inverted></v-text-field>
-        </v-app-bar>
-
-        <!-- Header Others-->
-        <v-app-bar app color="teal" dark v-else>
-            <v-btn icon @click.stop="$router.go(-1)">
+        <v-app-bar app color="teal" dark>
+            <v-app-bar-nav-icon @click.stop="drawer = !drawer" v-if="isHome"></v-app-bar-nav-icon>
+            
+            <v-btn icon @click.stop="$router.go(-1)" v-else>
                 <v-icon>mdi-arrow-left-circle</v-icon>
             </v-btn>
+            
+            <v-toolbar-title>{{ titlePage }}</v-toolbar-title>
 
             <!-- Spacing -->
             <v-spacer></v-spacer>
@@ -87,6 +75,10 @@
                     <v-icon>mdi-cash-multiple</v-icon>
                 </v-badge>
             </v-btn>
+            <v-btn icon v-if="!isCampaign" @click="closeDialog">
+                <v-icon>mdi-magnify</v-icon>
+            </v-btn>
+            <!-- <v-text-field class="mb-5" slot="extension" hide-details append-icon="mdi-microphone" flat label="Search Campaign" prepend-inner-icon="mdi-magnify" solo-inverted></v-text-field> -->
         </v-app-bar>
 
         <!-- Content -->
@@ -122,20 +114,34 @@
                 {title: 'Campaigns', icon: 'mdi-hand-heart', route: '/campaigns'},
             ],
             guest: false,
+            dialog: false,
         }),
         computed: {
             isHome() {
                 return (this.$route.path === '/' || this.$route.path === '/home')
             },
+            isCampaign() {
+                let route = this.$route.path.split("/")
+                route.pop()
+                let removeId = route.join("/")
+                return (removeId+'/' === '/campaign/')
+            },
             ...mapGetters({
-                transactions : 'transaction/transactions'
+                transactions : 'transaction/transactions',
+                titlePage: 'page/titlePage'
             }),
             // transaction () {
             //     return this.$store.getters.transaction
             // }
         },
         components: {
-            Alert: () => import('./components/Alert.vue')
+            Alert: () => import('./components/Alert.vue'),
+            Search: () => import('./components/Search.vue')
+        },
+        methods: {
+            closeDialog(value) {
+                this.dialog = value
+            }
         }
     };
 </script>

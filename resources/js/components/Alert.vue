@@ -6,11 +6,11 @@
         timeout="2751"
         :color="color"
     >
+    <v-icon>mdi-check-circle</v-icon>
         <span v-html="text"></span>
-
         <!-- <template v-slot:action="{ attrs }">
             <v-btn
-                color="red"
+                dark
                 text
                 v-bind="attrs"
                 @click="close"

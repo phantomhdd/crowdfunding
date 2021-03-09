@@ -98,7 +98,12 @@ var render = function() {
         expression: "alert"
       }
     },
-    [_c("span", { domProps: { innerHTML: _vm._s(_vm.text) } })]
+    [
+      _c("v-icon", [_vm._v("mdi-check-circle")]),
+      _vm._v(" "),
+      _c("span", { domProps: { innerHTML: _vm._s(_vm.text) } })
+    ],
+    1
   )
 }
 var staticRenderFns = []

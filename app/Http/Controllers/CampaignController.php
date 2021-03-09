@@ -87,10 +87,38 @@ class CampaignController extends Controller
 
         $data['campaign'] = $campaign;
 
-        return response()->json([
-            'response_code' => '00',
-            'response_message' => 'data campaigns berhasil ditampilkan',
-            'data' => $data,
-        ], 200);
+        if ($campaign) {
+            return response()->json([
+                'response_code' => '00',
+                'response_message' => 'data campaign berhasil ditampilkan',
+                'data' => $data,
+            ], 200);
+        } else {
+            return response()->json([
+                'response_code' => '01',
+                'response_message' => 'data campaign tidak ditemukan',
+            ], 404);
+        }
+    }
+
+    public function search($keyword) {
+        $campaigns = Campaigns::select('*')
+                                ->where('title', 'LIKE', '%'.$keyword.'%')
+                                ->get();
+
+        $data['campaigns'] = $campaigns;
+
+        if ($campaigns) {
+            return response()->json([
+                'response_code' => '00',
+                'response_message' => 'data campaign berhasil ditampilkan',
+                'data' => $data,
+            ], 200);
+        } else {
+            return response()->json([
+                'response_code' => '01',
+                'response_message' => 'data campaign tidak ditemukan',
+            ], 404);
+        }
     }
 }

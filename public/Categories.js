@@ -96,11 +96,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      campaign: {}
+      campaign: {},
+      titlePage: 'Campaign'
     };
   },
   created: function created() {
     this.go();
+    this.setTitle({
+      titlePage: this.titlePage
+    });
   },
   methods: _objectSpread(_objectSpread(_objectSpread({
     go: function go() {
@@ -119,7 +123,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   }, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapMutations"])({
     addTransaction: 'transaction/increment'
   })), Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])({
-    setAlert: 'alert/set'
+    setAlert: 'alert/set',
+    setTitle: 'page/set'
   })), {}, {
     donate: function donate() {
       this.addTransaction();
@@ -143,6 +148,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -165,16 +177,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       campaigns: [],
       page: 0,
-      lengthPage: 0
+      lengthPage: 0,
+      titlePage: 'All Campaigns'
     };
   },
   components: {
@@ -184,8 +194,13 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     this.go();
+    this.setTitle({
+      titlePage: this.titlePage
+    });
   },
-  methods: {
+  methods: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])({
+    setTitle: 'page/set'
+  })), {}, {
     go: function go() {
       var _this = this;
 
@@ -200,7 +215,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(responses);
       });
     }
-  }
+  })
 });
 
 /***/ }),
@@ -247,6 +262,13 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -299,11 +321,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       campaigns: [],
-      blogs: []
+      blogs: [],
+      titlePage: 'Crowfunding'
     };
   },
   components: {
@@ -311,6 +335,9 @@ __webpack_require__.r(__webpack_exports__);
       return __webpack_require__.e(/*! import() */ 0).then(__webpack_require__.bind(null, /*! ../components/CampaignItem.vue */ "./resources/js/components/CampaignItem.vue"));
     }
   },
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])({
+    setTitle: 'page/set'
+  })),
   created: function created() {
     var _this = this;
 
@@ -327,6 +354,9 @@ __webpack_require__.r(__webpack_exports__);
     })["catch"](function (error) {
       var responses = error.responses;
       console.log(responses);
+    });
+    this.setTitle({
+      titlePage: this.titlePage
     });
   }
 });
@@ -527,7 +557,7 @@ var render = function() {
                     },
                     [
                       _c("v-icon", [_vm._v("mdi-hand-heart")]),
-                      _vm._v(" DONATE\n            ")
+                      _vm._v("  DONATE\n            ")
                     ],
                     1
                   )
@@ -571,8 +601,6 @@ var render = function() {
         "v-container",
         { staticClass: "ma-0 pa-0", attrs: { "grid-list-sm": "" } },
         [
-          _c("v-subheader", [_vm._v("\n            All Campaigns\n        ")]),
-          _vm._v(" "),
           _c(
             "v-layout",
             { attrs: { wrap: "" } },
