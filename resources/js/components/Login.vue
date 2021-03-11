@@ -9,8 +9,6 @@
             </v-btn>
         </v-toolbar>
 
-        <v-divider></v-divider>
-
         <v-container fluid>
             <v-form ref="form" v-model="valid" lazy-validation>
                 <v-text-field
@@ -30,12 +28,11 @@
                     :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                     :type="showPassword ? 'text' : 'password'"
                     hint="At least 6 characters"
-                    counter
                     @click:append="showPassword = !showPassword"
                     class="mb-2"
                 ></v-text-field>
 
-                <div class="text-xs-center">
+                <div class="text-xs-center d-flex align-end">
                     <v-btn
                         color="success lighten-1"
                         :disabled="!valid"

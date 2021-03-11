@@ -25,17 +25,17 @@
                         <v-list-item-title>{{ user.user.name }}</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
-
-                <div class="pa-2" v-if="guest">
-                    <v-btn block color="primary" class="mb-1" @click="setDialogComponent('login')">
-                        <v-icon left>mdi-lock</v-icon>
-                        Login
-                    </v-btn>
-                    <v-btn block color="success">
-                        <v-icon left>mdi-account</v-icon>
-                        Register
-                    </v-btn>
-                </div>
+                
+                <v-list-item v-if="guest">
+                    <v-list-item-avatar>
+                        <v-avatar color="grey lighten-2" size="56">
+                            <v-icon dark>mdi-account-circle</v-icon>
+                        </v-avatar>
+                    </v-list-item-avatar>
+                    <v-list-item-content>
+                        <v-list-item-title>Guest</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
 
                 <v-divider></v-divider>
 
@@ -50,8 +50,19 @@
                 </v-list-item>
             </v-list>
 
-            <template v-slot:append v-if="!guest">
-                <div class="pa-2">
+            <template v-slot:append>
+                <div class="pa-2" v-if="guest">
+                    <v-btn block color="teal lighten-3" class="mb-1" @click="setDialogComponent('login')">
+                        <v-icon left>mdi-lock</v-icon>
+                        Login
+                    </v-btn>
+                    <v-btn block color="orange lighten-3">
+                        <v-icon left>mdi-account</v-icon>
+                        Register
+                    </v-btn>
+                </div>
+
+                <div class="pa-2" v-if="!guest">
                     <v-btn block dark color="red darken-2" @click="logout">
                         <v-icon left>mdi-lock</v-icon>
                         Logout
