@@ -42,7 +42,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function generate_otp_code() {
         do {
-            $random = mt_rand(000000, 999999);
+            $random = mt_rand(100000, 999999);
             $check = Otp_codes::where('otp_code',$random)->first();
         } while ($check);
 

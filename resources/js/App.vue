@@ -56,7 +56,7 @@
                         <v-icon left>mdi-lock</v-icon>
                         Login
                     </v-btn>
-                    <v-btn block color="orange lighten-2">
+                    <v-btn block color="orange lighten-2" @click="setDialogComponent('register')">
                         <v-icon left>mdi-account</v-icon>
                         Register
                     </v-btn>
@@ -168,6 +168,9 @@
             Alert: () => import('./components/Alert.vue'),
             Search: () => import('./components/Search.vue'),
             Login: () => import('./components/Login.vue'),
+            Register: () => import('./components/Register.vue'),
+            Otp: () => import('./components/Otp.vue'),
+            CreatePassword: () => import('./components/CreatePassword.vue'),
         },
         methods: {
             // closeDialog(value) {

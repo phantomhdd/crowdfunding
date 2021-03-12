@@ -58,6 +58,17 @@
                         Login with Google
                     </v-btn>
                 </div>
+                <div class="text-xs-center d-flex justify-center my-2">
+                    <v-btn
+                        color="blue-grey"
+                        @click="authProvider('github')"
+                        outlined
+                        :loading="loading3"
+                    >
+                        <v-icon left>mdi-github</v-icon>
+                        Login with GitHub
+                    </v-btn>
+                </div>
             </v-form>
         </v-container>
     </v-card>
@@ -73,11 +84,12 @@
                 loader: null,
                 loading: false,
                 loading2: false,
+                loading3: false,
                 valid: true,
                 email: '',
                 emailRules: [
                     v => !!v || 'E-mail is required',
-                    v => /([a-zA-Z0-9_]{1,})(@)([a-zA-Z0-9_]{2,}).([a-zA-Z0-9_]{2,})+/.test(v) || 'E-mail must be valid'
+                    v => /.+@.+\..+/.test(v) || 'E-mail must be valid'
                 ],
                 showPassword: false,
                 password: '',
@@ -144,10 +156,6 @@
             close() {
                 this.$emit('closed',false)
             },
-            // loading() {
-            //     this.clicked = true
-            //     setTimeout(() => (this.clicked = false), 3000)
-            // },
             authProvider(provider) {
                 this.loader = 'loading2'
                 if(navigator.onLine) {

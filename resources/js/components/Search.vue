@@ -64,11 +64,8 @@
                 }
             },
             close() {
-                if (this.keyword.length>0) {
-                    this.keyword = ''
-                } else {
-                    this.$emit('closed',false)
-                }
+                this.keyword = ''
+                this.$emit('closed',false)
             }
         }
     }

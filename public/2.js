@@ -81,6 +81,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'login',
@@ -89,12 +100,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       loader: null,
       loading: false,
       loading2: false,
+      loading3: false,
       valid: true,
       email: '',
       emailRules: [function (v) {
         return !!v || 'E-mail is required';
       }, function (v) {
-        return /([a-zA-Z0-9_]{1,})(@)([a-zA-Z0-9_]{2,}).([a-zA-Z0-9_]{2,})+/.test(v) || 'E-mail must be valid';
+        return /.+@.+\..+/.test(v) || 'E-mail must be valid';
       }],
       showPassword: false,
       password: '',
@@ -165,10 +177,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     close: function close() {
       this.$emit('closed', false);
     },
-    // loading() {
-    //     this.clicked = true
-    //     setTimeout(() => (this.clicked = false), 3000)
-    // },
     authProvider: function authProvider(provider) {
       var _this2 = this;
 
@@ -382,6 +390,38 @@ var render = function() {
                       ]),
                       _vm._v(
                         "\n                    Login with Google\n                "
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "text-xs-center d-flex justify-center my-2" },
+                [
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: {
+                        color: "blue-grey",
+                        outlined: "",
+                        loading: _vm.loading3
+                      },
+                      on: {
+                        click: function($event) {
+                          return _vm.authProvider("github")
+                        }
+                      }
+                    },
+                    [
+                      _c("v-icon", { attrs: { left: "" } }, [
+                        _vm._v("mdi-github")
+                      ]),
+                      _vm._v(
+                        "\n                    Login with GitHub\n                "
                       )
                     ],
                     1
