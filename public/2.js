@@ -65,11 +65,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'login',
   data: function data() {
     return {
+      loader: null,
+      loading: false,
+      loading2: false,
       valid: true,
       email: '',
       emailRules: [function (v) {
@@ -96,6 +115,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     submit: function submit() {
       var _this = this;
 
+      this.loader = 'loading';
+
       if (this.$refs.form.validate()) {
         var formData = {
           'email': this.email,
@@ -112,8 +133,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               color: 'success',
               text: 'Login Success!',
               icon: 'mdi-check-circle',
-              locAlert: true
+              locAlert: false
             });
+
+            _this.email = '';
+            _this.password = '';
 
             _this.close();
           } else {
@@ -140,8 +164,53 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     close: function close() {
       this.$emit('closed', false);
+    },
+    // loading() {
+    //     this.clicked = true
+    //     setTimeout(() => (this.clicked = false), 3000)
+    // },
+    authProvider: function authProvider(provider) {
+      var _this2 = this;
+
+      this.loader = 'loading2';
+
+      if (navigator.onLine) {
+        var url = '/api/auth/social/' + provider;
+        axios.get(url).then(function (response) {
+          var data = response.data;
+          window.location.href = data.url;
+        })["catch"](function (error) {
+          _this2.setAlert({
+            status: true,
+            color: 'error',
+            text: 'Login Failed!',
+            icon: 'mdi-alert-circle',
+            locAlert: false
+          });
+        });
+      } else {
+        this.setAlert({
+          status: true,
+          color: 'error',
+          text: 'No Internet Connection!',
+          icon: 'mdi-google-downasaur',
+          locAlert: false
+        });
+      }
     }
-  })
+  }),
+  watch: {
+    loader: function loader() {
+      var _this3 = this;
+
+      var l = this.loader;
+      this[l] = !this[l];
+      setTimeout(function () {
+        return _this3[l] = false;
+      }, 4000);
+      this.loader = null;
+    }
+  }
 });
 
 /***/ }),
@@ -235,7 +304,7 @@ var render = function() {
                   "prepend-icon": "mdi-key-variant",
                   "append-icon": _vm.showPassword ? "mdi-eye" : "mdi-eye-off",
                   type: _vm.showPassword ? "text" : "password",
-                  hint: "At least 6 characters"
+                  hint: "At least 8 characters"
                 },
                 on: {
                   "click:append": function($event) {
@@ -253,24 +322,67 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "div",
-                { staticClass: "text-xs-center d-flex align-end" },
+                { staticClass: "text-xs-center d-flex justify-center my-2" },
                 [
                   _c(
                     "v-btn",
                     {
                       attrs: {
-                        color: "success lighten-1",
-                        disabled: !_vm.valid
+                        color: "teal darken-1",
+                        disabled: !_vm.valid,
+                        loading: _vm.loading,
+                        dark: _vm.valid
                       },
                       on: { click: _vm.submit }
                     },
                     [
-                      _vm._v(
-                        "\n                    Login\n                    "
-                      ),
-                      _c("v-icon", { attrs: { dark: "", right: "" } }, [
+                      _c("v-icon", { attrs: { left: "" } }, [
                         _vm._v("mdi-lock-open")
-                      ])
+                      ]),
+                      _vm._v("\n                    Login\n                ")
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "d-flex flex-row align-center" },
+                [
+                  _c("v-divider", { staticClass: "mx-3" }),
+                  _vm._v(" or "),
+                  _c("v-divider", { staticClass: "mx-3" })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "text-xs-center d-flex justify-center my-2" },
+                [
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: {
+                        color: "blue-grey",
+                        outlined: "",
+                        loading: _vm.loading2
+                      },
+                      on: {
+                        click: function($event) {
+                          return _vm.authProvider("google")
+                        }
+                      }
+                    },
+                    [
+                      _c("v-icon", { attrs: { left: "" } }, [
+                        _vm._v("mdi-google")
+                      ]),
+                      _vm._v(
+                        "\n                    Login with Google\n                "
+                      )
                     ],
                     1
                   )

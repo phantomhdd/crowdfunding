@@ -27,19 +27,35 @@
                     prepend-icon="mdi-key-variant"
                     :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                     :type="showPassword ? 'text' : 'password'"
-                    hint="At least 6 characters"
+                    hint="At least 8 characters"
                     @click:append="showPassword = !showPassword"
                     class="mb-2"
                 ></v-text-field>
 
-                <div class="text-xs-center d-flex align-end">
+                <div class="text-xs-center d-flex justify-center my-2">
                     <v-btn
-                        color="success lighten-1"
+                        color="teal darken-1"
                         :disabled="!valid"
                         @click="submit"
+                        :loading="loading"
+                        :dark="valid"
                     >
+                        <v-icon left>mdi-lock-open</v-icon>
                         Login
-                        <v-icon dark right>mdi-lock-open</v-icon>
+                    </v-btn>
+                </div>
+                <div class="d-flex flex-row align-center">
+                    <v-divider class="mx-3"></v-divider> or <v-divider class="mx-3"></v-divider>
+                </div>
+                <div class="text-xs-center d-flex justify-center my-2">
+                    <v-btn
+                        color="blue-grey"
+                        @click="authProvider('google')"
+                        outlined
+                        :loading="loading2"
+                    >
+                        <v-icon left>mdi-google</v-icon>
+                        Login with Google
                     </v-btn>
                 </div>
             </v-form>
@@ -54,6 +70,9 @@
         name: 'login',
         data() {
             return {
+                loader: null,
+                loading: false,
+                loading2: false,
                 valid: true,
                 email: '',
                 emailRules: [
@@ -79,6 +98,7 @@
                 setAuth: 'auth/set'
             }),
             submit() {
+                this.loader = 'loading'
                 if(this.$refs.form.validate()) {
                     let formData = {
                         'email': this.email,
@@ -94,8 +114,10 @@
                                     color: 'success',
                                     text: 'Login Success!',
                                     icon: 'mdi-check-circle',
-                                    locAlert: true,
+                                    locAlert: false,
                                 })
+                                this.email = ''
+                                this.password = ''
                                 this.close()
                             } else {
                                 this.setAlert({
@@ -121,7 +143,49 @@
             },
             close() {
                 this.$emit('closed',false)
+            },
+            // loading() {
+            //     this.clicked = true
+            //     setTimeout(() => (this.clicked = false), 3000)
+            // },
+            authProvider(provider) {
+                this.loader = 'loading2'
+                if(navigator.onLine) {
+                    let url = '/api/auth/social/' + provider
+                    axios.get(url)
+                        .then((response) => {
+                            let data = response.data
+                            window.location.href = data.url
+                        })
+                        .catch((error) => {
+                            this.setAlert({
+                                status: true,
+                                color: 'error',
+                                text: 'Login Failed!',
+                                icon: 'mdi-alert-circle',
+                                locAlert: false,
+                            })
+                        })
+                } else {
+                    this.setAlert({
+                        status: true,
+                        color: 'error',
+                        text: 'No Internet Connection!',
+                        icon: 'mdi-google-downasaur',
+                        locAlert: false,
+                    })
+                }
             }
-        }
+        },
+        watch: {
+            loader () {
+                const l = this.loader
+                this[l] = !this[l]
+
+                setTimeout(() => (this[l] = false), 4000)
+
+                this.loader = null
+            },
+        },
     }
 </script>

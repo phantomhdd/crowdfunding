@@ -33,6 +33,11 @@ const router = new Router({
             component: () => import(/* webpackChunkName: "Categories" */ './views/Campaign.vue')
         },
         {
+            path: '/auth/social/:provider/callback',
+            name: 'social',
+            component: () => import(/* webpackChunkName: "Categories" */ './views/Social.vue')
+        },
+        {
             path: '*',
             redirect: '/',
         },

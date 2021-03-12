@@ -52,18 +52,18 @@
 
             <template v-slot:append>
                 <div class="pa-2" v-if="guest">
-                    <v-btn block color="teal lighten-3" class="mb-1" @click="setDialogComponent('login')">
+                    <v-btn block color="teal lighten-2" class="mb-1" @click="setDialogComponent('login')">
                         <v-icon left>mdi-lock</v-icon>
                         Login
                     </v-btn>
-                    <v-btn block color="orange lighten-3">
+                    <v-btn block color="orange lighten-2">
                         <v-icon left>mdi-account</v-icon>
                         Register
                     </v-btn>
                 </div>
 
                 <div class="pa-2" v-if="!guest">
-                    <v-btn block dark color="red darken-2" @click="logout">
+                    <v-btn block dark color="red darken-2" @click="logout" :loading="clicked">
                         <v-icon left>mdi-lock</v-icon>
                         Logout
                     </v-btn>
@@ -125,6 +125,7 @@
     export default {
         name: 'App',
         data: () => ({
+            clicked: false,
             drawer: false,
             menus: [
                 {title: 'Home', icon: 'mdi-home', route: '/'},
@@ -177,8 +178,14 @@
                 setDialogComponent: 'dialog/setComponent',
                 setAuth: 'auth/set',
                 setAlert: 'alert/set',
+                checkToken: 'auth/checkToken',
             }),
+            loading() {
+                this.clicked = true
+                setTimeout(() => (this.clicked = false), 3000)
+            },
             logout() {
+                this.loading()
                 let config = {
                     headers: {
                         'Authorization': 'Bearer ' + this.user.token,
@@ -194,6 +201,7 @@
                             icon: 'mdi-check-circle',
                             locAlert: false,
                         })
+                        this.drawer = false
                     })
                     .catch((error) => {
                         let resp_error = error.response
@@ -205,6 +213,12 @@
                             locAlert: false,
                         })
                     })
+            }
+        },
+        mounted() {
+            this.setDialogStatus(false)
+            if(this.user){
+                this.checkToken(this.user)
             }
         }
     };
