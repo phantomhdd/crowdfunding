@@ -81,6 +81,13 @@
                     axios.post('/api/auth/register', formData)
                         .then((response) => {
                             let { data } = response.data
+                            this.setAlert({
+                                status: true,
+                                color: 'warning',
+                                text: 'Check your E-mail!',
+                                icon: 'mdi-alert-circle',
+                                locAlert: false,
+                            })
                             this.setAuth(data)
                             this.name = ''
                             this.email = ''

@@ -71,6 +71,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'createPassword',
   data: function data() {
+    var _this = this;
+
     return {
       loader: null,
       loading: false,
@@ -82,63 +84,66 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }, function (v) {
         return v && v.length >= 8 || 'Min 8 characters';
       }],
-      showPasswordConfirm: false,
-      passwordConfirm: '',
       passwordConfirmRules: [function (v) {
         return !!v || 'Password is required';
       }, function (v) {
         return v && v.length >= 8 || 'Min 8 characters';
-      }]
+      }, function (v) {
+        return v === _this.password || 'Password don\'t match';
+      }],
+      showPasswordConfirm: false,
+      passwordConfirm: ''
     };
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])({
+  computed: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])({
     current_user: 'auth/user'
-  })),
+  })), {}, {
+    email: function email() {
+      return this.current_user.user.email;
+    }
+  }),
   methods: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])({
     setAlert: 'alert/set',
     setAuth: 'auth/set'
   })), {}, {
     submit: function submit() {
-      var _this = this;
+      var _this2 = this;
 
       this.loader = 'loading';
 
       if (this.$refs.form.validate()) {
         var formData = {
-          'otp_code': this.otpcode
+          'email': this.email,
+          'password': this.password,
+          'password_confirmation': this.passwordConfirm
         };
-        axios.post('/api/auth/verification', formData).then(function (response) {
-          var data = response.data;
-          console.log(data);
+        axios.post('/api/auth/update-password', formData).then(function (response) {
+          var data = response.data.data;
 
-          if (data.response_code == '01') {
-            _this.setAlert({
-              status: true,
-              color: 'error',
-              text: data.response_message,
-              icon: 'mdi-close-octagon',
-              locAlert: false
-            });
-          } else {
-            _this.setAlert({
-              status: true,
-              color: 'success',
-              text: 'Berhasil diverifikasi!',
-              icon: 'mdi-check-circle',
-              locAlert: false
-            });
+          _this2.setAlert({
+            status: true,
+            color: 'success',
+            text: 'Account was Created!',
+            icon: 'mdi-check-circle',
+            locAlert: false
+          });
 
-            _this.setAuth(data);
+          _this2.setAuth(data);
 
-            _this.otpcode = '';
+          _this2.login(_this2.email, _this2.password);
 
-            _this.close();
-          }
+          _this2.password = '';
+          _this2.passwordConfirm = '';
+
+          _this2.$refs.form.reset();
+
+          _this2.$refs.form.resetValidation();
+
+          _this2.close();
         })["catch"](function (error) {
           var response = error.response;
-          console.log(response);
 
-          _this.setAlert({
+          _this2.setAlert({
             status: true,
             color: 'error',
             text: response.data.error,
@@ -148,18 +153,36 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
       }
     },
+    login: function login(email, pass) {
+      var _this3 = this;
+
+      var formData = {
+        'email': email,
+        'password': pass
+      };
+      axios.post('/api/auth/login', formData).then(function (response) {
+        var data = response.data.data;
+
+        _this3.setAuth(data);
+
+        _this3.email = '';
+        _this3.password = '';
+
+        _this3.close();
+      });
+    },
     close: function close() {
       this.$emit('closed', false);
     }
   }),
   watch: {
     loader: function loader() {
-      var _this2 = this;
+      var _this4 = this;
 
       var l = this.loader;
       this[l] = !this[l];
       setTimeout(function () {
-        return _this2[l] = false;
+        return _this4[l] = false;
       }, 4000);
       this.loader = null;
     }
@@ -221,7 +244,7 @@ var render = function() {
                   rules: _vm.passwordRules,
                   label: "Password",
                   required: "",
-                  "prepend-icon": "mdi-key-variant",
+                  "prepend-icon": "mdi-form-textbox-password",
                   "append-icon": _vm.showPassword ? "mdi-eye" : "mdi-eye-off",
                   type: _vm.showPassword ? "text" : "password",
                   hint: "At least 8 characters"
@@ -246,7 +269,7 @@ var render = function() {
                   rules: _vm.passwordConfirmRules,
                   label: "Password Confirmation",
                   required: "",
-                  "prepend-icon": "mdi-key-variant",
+                  "prepend-icon": "mdi-form-textbox-password",
                   "append-icon": _vm.showPasswordConfirm
                     ? "mdi-eye"
                     : "mdi-eye-off",
@@ -284,7 +307,7 @@ var render = function() {
                     },
                     [
                       _c("v-icon", { attrs: { left: "" } }, [
-                        _vm._v("mdi-key")
+                        _vm._v("mdi-account-check")
                       ]),
                       _vm._v("\n                    Create\n                ")
                     ],

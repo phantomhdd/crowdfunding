@@ -100,6 +100,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         axios.post('/api/auth/register', formData).then(function (response) {
           var data = response.data.data;
 
+          _this.setAlert({
+            status: true,
+            color: 'warning',
+            text: 'Check your E-mail!',
+            icon: 'mdi-alert-circle',
+            locAlert: false
+          });
+
           _this.setAuth(data);
 
           _this.name = '';

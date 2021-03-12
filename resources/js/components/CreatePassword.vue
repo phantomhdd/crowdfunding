@@ -12,7 +12,7 @@
                     :rules="passwordRules"
                     label="Password"
                     required
-                    prepend-icon="mdi-key-variant"
+                    prepend-icon="mdi-form-textbox-password"
                     :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                     :type="showPassword ? 'text' : 'password'"
                     hint="At least 8 characters"
@@ -24,7 +24,7 @@
                     :rules="passwordConfirmRules"
                     label="Password Confirmation"
                     required
-                    prepend-icon="mdi-key-variant"
+                    prepend-icon="mdi-form-textbox-password"
                     :append-icon="showPasswordConfirm ? 'mdi-eye' : 'mdi-eye-off'"
                     :type="showPasswordConfirm ? 'text' : 'password'"
                     hint="At least 8 characters"
@@ -40,7 +40,7 @@
                         :loading="loading"
                         :dark="valid"
                     >
-                        <v-icon left>mdi-key</v-icon>
+                        <v-icon left>mdi-account-check</v-icon>
                         Create
                     </v-btn>
                 </div>
@@ -65,18 +65,22 @@
                     v => !!v || 'Password is required',
                     v => (v && v.length >= 8) || 'Min 8 characters'
                 ],
-                showPasswordConfirm: false,
-                passwordConfirm: '',
                 passwordConfirmRules: [
                     v => !!v || 'Password is required',
-                    v => (v && v.length >= 8) || 'Min 8 characters'
+                    v => (v && v.length >= 8) || 'Min 8 characters',
+                    v => v === this.password || 'Password don\'t match'
                 ],
+                showPasswordConfirm: false,
+                passwordConfirm: '',
             }
         },
         computed: {
             ...mapGetters({
                 current_user: 'auth/user'
             }),
+            email(){
+                return this.current_user.user.email
+            }
         },
         methods: {
             ...mapActions({
@@ -87,36 +91,30 @@
                 this.loader = 'loading'
                 if(this.$refs.form.validate()) {
                     let formData = {
-                        'otp_code': this.otpcode,
+                        'email': this.email,
+                        'password': this.password,
+                        'password_confirmation': this.passwordConfirm,
                     }
-                    axios.post('/api/auth/verification', formData)
+                    axios.post('/api/auth/update-password', formData)
                         .then((response) => {
-                            let { data } = response
-                            console.log(data)
-                            if(data.response_code == '01'){
-                                this.setAlert({
-                                    status: true,
-                                    color: 'error',
-                                    text: data.response_message,
-                                    icon: 'mdi-close-octagon',
-                                    locAlert: false,
-                                })
-                            } else {
-                                this.setAlert({
-                                    status: true,
-                                    color: 'success',
-                                    text: 'Berhasil diverifikasi!',
-                                    icon: 'mdi-check-circle',
-                                    locAlert: false,
-                                })
-                                this.setAuth(data)
-                                this.otpcode = ''
-                                this.close()
-                            }
+                            let { data } = response.data
+                            this.setAlert({
+                                status: true,
+                                color: 'success',
+                                text: 'Account was Created!',
+                                icon: 'mdi-check-circle',
+                                locAlert: false,
+                            })
+                            this.setAuth(data)
+                            this.login(this.email, this.password)
+                            this.password = ''
+                            this.passwordConfirm = ''
+                            this.$refs.form.reset()
+                            this.$refs.form.resetValidation()
+                            this.close()
                         })
                         .catch((error) => {
                             let response = error.response
-                            console.log(response)
                             this.setAlert({
                                 status: true,
                                 color: 'error',
@@ -126,6 +124,20 @@
                             })
                         })
                 }
+            },
+            login(email,pass) {
+                let formData = {
+                    'email': email,
+                    'password': pass
+                }
+                axios.post('/api/auth/login', formData)
+                    .then((response) => {
+                        let { data } = response.data
+                        this.setAuth(data)
+                        this.email = ''
+                        this.password = ''
+                        this.close()
+                    })
             },
             close() {
                 this.$emit('closed',false)

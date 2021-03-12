@@ -84,7 +84,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         };
         axios.post('/api/auth/verification', formData).then(function (response) {
           var data = response.data;
-          console.log(data);
 
           if (data.response_code == '01') {
             _this.setAlert({
@@ -98,12 +97,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             _this.setAlert({
               status: true,
               color: 'success',
-              text: 'Berhasil diverifikasi!',
+              text: 'Account was Verified!',
               icon: 'mdi-check-circle',
               locAlert: false
             });
 
-            _this.setAuth(data);
+            _this.setAuth(data.data);
 
             _this.otpcode = '';
 

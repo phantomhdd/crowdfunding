@@ -19,7 +19,8 @@
             <v-list>
                 <v-list-item v-if="!guest">
                     <v-list-item-avatar>
-                        <v-img :src="user.user.photo"></v-img>
+                        <v-img :src="user.user.photo" v-show="user.user.photo!=null"></v-img>
+                        <v-icon dark class="grey lighten-2" size="56" v-show="user.user.photo==null">mdi-account-circle</v-icon>
                     </v-list-item-avatar>
                     <v-list-item-content>
                         <v-list-item-title>{{ user.user.name }}</v-list-item-title>
@@ -28,9 +29,7 @@
                 
                 <v-list-item v-if="guest">
                     <v-list-item-avatar>
-                        <v-avatar color="grey lighten-2" size="56">
-                            <v-icon dark>mdi-account-circle</v-icon>
-                        </v-avatar>
+                        <v-icon dark class="grey lighten-2" size="56">mdi-account-circle</v-icon>
                     </v-list-item-avatar>
                     <v-list-item-content>
                         <v-list-item-title>Guest</v-list-item-title>

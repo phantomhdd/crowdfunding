@@ -66,7 +66,6 @@
                     axios.post('/api/auth/verification', formData)
                         .then((response) => {
                             let { data } = response
-                            console.log(data)
                             if(data.response_code == '01'){
                                 this.setAlert({
                                     status: true,
@@ -79,11 +78,11 @@
                                 this.setAlert({
                                     status: true,
                                     color: 'success',
-                                    text: 'Berhasil diverifikasi!',
+                                    text: 'Account was Verified!',
                                     icon: 'mdi-check-circle',
                                     locAlert: false,
                                 })
-                                this.setAuth(data)
+                                this.setAuth(data.data)
                                 this.otpcode = ''
                                 this.setDialogComponent('createPassword')
                             }

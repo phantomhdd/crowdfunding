@@ -151,6 +151,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             _this.email = '';
             _this.password = '';
 
+            _this.$refs.form.reset();
+
+            _this.$refs.form.resetValidation();
+
             _this.close();
           } else {
             _this.setAlert({

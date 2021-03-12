@@ -130,6 +130,8 @@
                                 })
                                 this.email = ''
                                 this.password = ''
+                                this.$refs.form.reset()
+                                this.$refs.form.resetValidation()
                                 this.close()
                             } else {
                                 this.setAlert({

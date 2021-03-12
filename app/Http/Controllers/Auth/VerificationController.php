@@ -23,7 +23,7 @@ class VerificationController extends Controller
         if(!$otp_code) {
             return response()->json([
                 'response_code' => '01',
-                'response_message' => 'kode otp tidak ditemukan',
+                'response_message' => 'OTP Code was incorrect!',
             ]);
         }
 
