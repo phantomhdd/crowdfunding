@@ -134,7 +134,6 @@
                     .then((response) => {
                         let { data } = response.data
                         this.setAuth(data)
-                        this.email = ''
                         this.password = ''
                         this.close()
                     })

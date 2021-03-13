@@ -91,6 +91,8 @@
                             this.setAuth(data)
                             this.name = ''
                             this.email = ''
+                            this.$refs.form.reset()
+                            this.$refs.form.resetValidation()
                             this.setDialogComponent('otp')
                         })
                         .catch((error) => {

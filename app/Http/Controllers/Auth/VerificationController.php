@@ -32,7 +32,8 @@ class VerificationController extends Controller
         if(strtotime($now) > strtotime($otp_code->expired)) {
             return response()->json([
                 'response_code' => '01',
-                'response_message' => 'kode otp sudah tidak berlaku, silakan generate ulang',
+                'response_message' => 'OTP Code is no longer valid, please re-generate!',
+
             ]);
         }
 

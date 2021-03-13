@@ -1,9 +1,9 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[4],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Register.vue?vue&type=script&lang=js&":
-/*!*******************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Register.vue?vue&type=script&lang=js& ***!
-  \*******************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Otp.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Otp.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -62,44 +62,71 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
+var intervalTimer;
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'register',
+  name: 'otp',
   data: function data() {
     return {
+      selectedTime: 0,
+      timeLeft: '00:00',
+      endTime: '0',
+      times: 300,
       loader: null,
       loading: false,
       valid: true,
-      name: '',
-      nameRules: [function (v) {
-        return !!v || 'Name is required';
-      }],
-      email: '',
-      emailRules: [function (v) {
-        return !!v || 'E-mail is required';
+      otpcode: '',
+      otpcodeRules: [function (v) {
+        return !!v || 'Code is required';
       }, function (v) {
-        return /.+@.+\..+/.test(v) || 'E-mail must be valid';
+        return /^[1-9]\d*$|^$/.test(v) || 'Number only';
+      }, function (v) {
+        return v && v.length >= 6 || 'Min 6 digits';
       }]
     };
   },
+  created: function created() {
+    this.setTime(this.times);
+  },
+  computed: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])({
+    current_user: 'auth/user'
+  })), {}, {
+    email: function email() {
+      return this.current_user.user.email;
+    }
+  }),
   methods: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])({
     setDialogComponent: 'dialog/setComponent',
     setAlert: 'alert/set',
     setAuth: 'auth/set'
   })), {}, {
-    registration: function registration() {
+    regenerateOtp: function regenerateOtp() {
       var _this = this;
 
-      this.loader = 'loading';
+      this.setTime(this.times);
+      var formData = {
+        email: this.email
+      };
+      axios.post("/api/auth/regenerate-otp", formData).then(function (response) {
+        var data = response.data;
+        _this.otpcode = '';
 
-      if (this.$refs.form.validate()) {
-        var formData = {
-          'name': this.name,
-          'email': this.email
-        };
-        axios.post('/api/auth/register', formData).then(function (response) {
-          var data = response.data.data;
+        _this.$refs.form.reset();
 
+        _this.$refs.form.resetValidation();
+
+        if (data.response_code == '01') {
+          _this.setAlert({
+            status: true,
+            color: 'error',
+            text: data.response_message,
+            icon: 'mdi-close-octagon',
+            locAlert: false
+          });
+        } else {
           _this.setAlert({
             status: true,
             color: 'warning',
@@ -107,38 +134,109 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             icon: 'mdi-alert-circle',
             locAlert: false
           });
+        }
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    setTime: function setTime(seconds) {
+      clearInterval(intervalTimer);
+      this.timer(seconds);
+    },
+    timer: function timer(seconds) {
+      var now = Date.now();
+      var end = now + seconds * 1000;
+      this.displayTimeLeft(seconds);
+      this.selectedTime = seconds;
+      this.countdown(end);
+    },
+    countdown: function countdown(end) {
+      var _this2 = this;
 
-          _this.setAuth(data);
+      intervalTimer = setInterval(function () {
+        var secondsLeft = Math.round((end - Date.now()) / 1000);
 
-          _this.name = '';
-          _this.email = '';
+        if (secondsLeft === 0) {
+          _this2.endTime = 0;
+        }
 
-          _this.setDialogComponent('otp');
+        if (secondsLeft < 0) {
+          clearInterval(intervalTimer);
+          return;
+        }
+
+        _this2.displayTimeLeft(secondsLeft);
+      }, 1000);
+    },
+    displayTimeLeft: function displayTimeLeft(secondsLeft) {
+      var minutes = Math.floor(secondsLeft % 3600 / 60);
+      var seconds = secondsLeft % 60;
+      this.timeLeft = "".concat(this.zeroPadded(minutes), ":").concat(this.zeroPadded(seconds));
+    },
+    zeroPadded: function zeroPadded(num) {
+      return num < 10 ? "0".concat(num) : num;
+    },
+    submit: function submit() {
+      var _this3 = this;
+
+      this.loader = 'loading';
+
+      if (this.$refs.form.validate()) {
+        var formData = {
+          'otp_code': this.otpcode
+        };
+        axios.post('/api/auth/verification', formData).then(function (response) {
+          var data = response.data;
+
+          if (data.response_code == '01') {
+            _this3.setAlert({
+              status: true,
+              color: 'error',
+              text: data.response_message,
+              icon: 'mdi-close-octagon',
+              locAlert: false
+            });
+          } else {
+            _this3.setAlert({
+              status: true,
+              color: 'success',
+              text: 'Account was Verified!',
+              icon: 'mdi-check-circle',
+              locAlert: false
+            });
+
+            _this3.setAuth(data.data);
+
+            _this3.otpcode = '';
+
+            _this3.$refs.form.reset();
+
+            _this3.$refs.form.resetValidation();
+
+            _this3.setDialogComponent('createPassword');
+          }
         })["catch"](function (error) {
           var response = error.response;
 
-          _this.setAlert({
+          _this3.setAlert({
             status: true,
             color: 'error',
-            text: response.data.errors.email[0],
+            text: response.data.error,
             icon: 'mdi-close-octagon',
             locAlert: false
           });
         });
       }
-    },
-    close: function close() {
-      this.$emit('closed', false);
     }
   }),
   watch: {
     loader: function loader() {
-      var _this2 = this;
+      var _this4 = this;
 
       var l = this.loader;
       this[l] = !this[l];
       setTimeout(function () {
-        return _this2[l] = false;
+        return _this4[l] = false;
       }, 4000);
       this.loader = null;
     }
@@ -147,10 +245,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Register.vue?vue&type=template&id=97358ae4&":
-/*!***********************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Register.vue?vue&type=template&id=97358ae4& ***!
-  \***********************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Otp.vue?vue&type=template&id=5c5a8ce0&":
+/*!******************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Otp.vue?vue&type=template&id=5c5a8ce0& ***!
+  \******************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -169,27 +267,9 @@ var render = function() {
         "v-toolbar",
         { attrs: { dark: "", color: "teal darken-2" } },
         [
-          _c("v-icon", { attrs: { left: "" } }, [
-            _vm._v("mdi-account-multiple")
-          ]),
+          _c("v-icon", { attrs: { left: "" } }, [_vm._v("mdi-shield-key")]),
           _vm._v(" "),
-          _c("v-toolbar-title", [_vm._v("Register")]),
-          _vm._v(" "),
-          _c("v-spacer"),
-          _vm._v(" "),
-          _c(
-            "v-btn",
-            {
-              attrs: { icon: "", dark: "" },
-              nativeOn: {
-                click: function($event) {
-                  return _vm.close($event)
-                }
-              }
-            },
-            [_c("v-icon", [_vm._v("mdi-close-circle")])],
-            1
-          )
+          _c("v-toolbar-title", [_vm._v("OTP Code")])
         ],
         1
       ),
@@ -214,36 +294,34 @@ var render = function() {
             [
               _c("v-text-field", {
                 attrs: {
-                  rules: _vm.nameRules,
-                  label: "Name",
+                  label: "OTP Code",
+                  rules: _vm.otpcodeRules,
                   required: "",
                   autofocus: "",
-                  "prepend-icon": "mdi-account"
+                  "prepend-icon": "mdi-key",
+                  hint: "At least 6 digits",
+                  maxlength: "6"
                 },
                 model: {
-                  value: _vm.name,
+                  value: _vm.otpcode,
                   callback: function($$v) {
-                    _vm.name = $$v
+                    _vm.otpcode = $$v
                   },
-                  expression: "name"
+                  expression: "otpcode"
                 }
               }),
               _vm._v(" "),
-              _c("v-text-field", {
-                attrs: {
-                  rules: _vm.emailRules,
-                  label: "Email",
-                  required: "",
-                  "prepend-icon": "mdi-email-variant"
-                },
-                model: {
-                  value: _vm.email,
-                  callback: function($$v) {
-                    _vm.email = $$v
-                  },
-                  expression: "email"
-                }
-              }),
+              _c(
+                "div",
+                { staticClass: "text-xs-center d-flex justify-center" },
+                [
+                  _vm._v(
+                    "\n                " +
+                      _vm._s(_vm.timeLeft) +
+                      "\n            "
+                  )
+                ]
+              ),
               _vm._v(" "),
               _c(
                 "div",
@@ -253,20 +331,44 @@ var render = function() {
                     "v-btn",
                     {
                       attrs: {
-                        color: "orange lighten-2",
+                        color: "teal darken-1",
                         disabled: !_vm.valid,
                         loading: _vm.loading,
                         dark: _vm.valid
                       },
-                      on: { click: _vm.registration }
+                      on: { click: _vm.submit }
                     },
                     [
                       _c("v-icon", { attrs: { left: "" } }, [
-                        _vm._v("mdi-account-plus")
+                        _vm._v("mdi-send")
                       ]),
-                      _vm._v("\n                    Regist\n                ")
+                      _vm._v("\n                    Send Otp\n                ")
                     ],
                     1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "d-flex flex-row align-center px-5" },
+                [_c("v-divider")],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "text-xs-center d-flex justify-center" },
+                [
+                  _c(
+                    "v-btn",
+                    {
+                      staticClass: "caption",
+                      attrs: { text: "" },
+                      on: { click: _vm.regenerateOtp }
+                    },
+                    [_vm._v("Re-generate OTP Code")]
                   )
                 ],
                 1
@@ -288,18 +390,19 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./resources/js/components/Register.vue":
-/*!**********************************************!*\
-  !*** ./resources/js/components/Register.vue ***!
-  \**********************************************/
-/*! exports provided: default */
+/***/ "./resources/js/components/Otp.vue":
+/*!*****************************************!*\
+  !*** ./resources/js/components/Otp.vue ***!
+  \*****************************************/
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Register_vue_vue_type_template_id_97358ae4___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Register.vue?vue&type=template&id=97358ae4& */ "./resources/js/components/Register.vue?vue&type=template&id=97358ae4&");
-/* harmony import */ var _Register_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Register.vue?vue&type=script&lang=js& */ "./resources/js/components/Register.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var _Otp_vue_vue_type_template_id_5c5a8ce0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Otp.vue?vue&type=template&id=5c5a8ce0& */ "./resources/js/components/Otp.vue?vue&type=template&id=5c5a8ce0&");
+/* harmony import */ var _Otp_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Otp.vue?vue&type=script&lang=js& */ "./resources/js/components/Otp.vue?vue&type=script&lang=js&");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _Otp_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _Otp_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -308,9 +411,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _Register_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Register_vue_vue_type_template_id_97358ae4___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Register_vue_vue_type_template_id_97358ae4___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _Otp_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Otp_vue_vue_type_template_id_5c5a8ce0___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Otp_vue_vue_type_template_id_5c5a8ce0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -320,38 +423,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/Register.vue"
+component.options.__file = "resources/js/components/Otp.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/components/Register.vue?vue&type=script&lang=js&":
-/*!***********************************************************************!*\
-  !*** ./resources/js/components/Register.vue?vue&type=script&lang=js& ***!
-  \***********************************************************************/
-/*! exports provided: default */
+/***/ "./resources/js/components/Otp.vue?vue&type=script&lang=js&":
+/*!******************************************************************!*\
+  !*** ./resources/js/components/Otp.vue?vue&type=script&lang=js& ***!
+  \******************************************************************/
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Register_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./Register.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Register.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Register_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Otp_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./Otp.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Otp.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Otp_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/components/Register.vue?vue&type=template&id=97358ae4&":
-/*!*****************************************************************************!*\
-  !*** ./resources/js/components/Register.vue?vue&type=template&id=97358ae4& ***!
-  \*****************************************************************************/
+/***/ "./resources/js/components/Otp.vue?vue&type=template&id=5c5a8ce0&":
+/*!************************************************************************!*\
+  !*** ./resources/js/components/Otp.vue?vue&type=template&id=5c5a8ce0& ***!
+  \************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Register_vue_vue_type_template_id_97358ae4___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./Register.vue?vue&type=template&id=97358ae4& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Register.vue?vue&type=template&id=97358ae4&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Register_vue_vue_type_template_id_97358ae4___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Otp_vue_vue_type_template_id_5c5a8ce0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./Otp.vue?vue&type=template&id=5c5a8ce0& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Otp.vue?vue&type=template&id=5c5a8ce0&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Otp_vue_vue_type_template_id_5c5a8ce0___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Register_vue_vue_type_template_id_97358ae4___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Otp_vue_vue_type_template_id_5c5a8ce0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

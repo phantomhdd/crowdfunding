@@ -159,7 +159,11 @@
                 this.$emit('closed',false)
             },
             authProvider(provider) {
-                this.loader = 'loading2'
+                if(provider === 'google'){
+                    this.loader = 'loading2'
+                } else if(provider === 'github'){
+                    this.loader = 'loading3'
+                }
                 if(navigator.onLine) {
                     let url = '/api/auth/social/' + provider
                     axios.get(url)
@@ -185,6 +189,8 @@
                         locAlert: false,
                     })
                 }
+                this.$refs.form.reset()
+                this.$refs.form.resetValidation()
             }
         },
         watch: {
